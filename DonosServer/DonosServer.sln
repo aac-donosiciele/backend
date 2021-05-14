@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30711.63
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API", "DonosServer\API.csproj", "{1767769C-843A-4A3D-8EC2-0CCC7461D47A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core1\Core.csproj", "{1BE30474-323F-4527-A169-F41768B3ADB2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure1\Infrastructure.csproj", "{B7E0EBB3-81F4-4C5A-891C-C68C9CE93C8E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1767769C-843A-4A3D-8EC2-0CCC7461D47A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1767769C-843A-4A3D-8EC2-0CCC7461D47A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1767769C-843A-4A3D-8EC2-0CCC7461D47A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1767769C-843A-4A3D-8EC2-0CCC7461D47A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1BE30474-323F-4527-A169-F41768B3ADB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1BE30474-323F-4527-A169-F41768B3ADB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1BE30474-323F-4527-A169-F41768B3ADB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1BE30474-323F-4527-A169-F41768B3ADB2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7E0EBB3-81F4-4C5A-891C-C68C9CE93C8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7E0EBB3-81F4-4C5A-891C-C68C9CE93C8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7E0EBB3-81F4-4C5A-891C-C68C9CE93C8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7E0EBB3-81F4-4C5A-891C-C68C9CE93C8E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {713C7F85-2679-4FD6-B769-9AF27A17C964}
+	EndGlobalSection
+EndGlobal
