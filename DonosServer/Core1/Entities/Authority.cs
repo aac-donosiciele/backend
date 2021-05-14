@@ -2,7 +2,7 @@
 
 namespace Core.Entities
 {
-    class Authority : BaseModel
+    public class Authority : BaseModel
     {
         public string Name { get; set; }
         public string Address { get; set; }
