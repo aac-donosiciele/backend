@@ -13,11 +13,11 @@ namespace Infrastructure.Configurations
             builder.HasOne(c => c.Official)
                 .WithMany(o => o.ComplaintLogs)
                 .HasForeignKey(c => c.OfficialId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.ClientSetNull);
             builder.HasOne(cl => cl.Complaint)
                 .WithMany(c => c.ComplaintLogs)
                 .HasForeignKey(cl => cl.ComplaintId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.ClientSetNull);
         }
     }
 }

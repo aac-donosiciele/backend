@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
 using Core.Entities;
 using Infrastructure.Configurations;
 

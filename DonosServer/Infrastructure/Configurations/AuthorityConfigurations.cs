@@ -9,10 +9,10 @@ namespace Infrastructure.Configurations
         public void Configure(EntityTypeBuilder<Authority> builder)
         {
             builder.HasKey(a => a.Id);
-            builder.Property(a => a.Name).HasMaxLength(100).IsRequired();
-            builder.Property(a => a.PhoneNumber).HasMaxLength(12).IsRequired();
-            builder.Property(a => a.Address).HasMaxLength(255).IsRequired();
-            builder.Property(a => a.MaxOfficials).HasDefaultValue(10).IsRequired();
+            builder.Property(a => a.Name).HasMaxLength(100);
+            builder.Property(a => a.PhoneNumber).HasMaxLength(12);
+            builder.Property(a => a.Address).HasMaxLength(255);
+            builder.Property(a => a.MaxOfficials).HasDefaultValue(10);
             builder.HasIndex(a => a.Id);
         }
     }

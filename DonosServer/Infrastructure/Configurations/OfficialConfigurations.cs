@@ -12,7 +12,8 @@ namespace Infrastructure.Configurations
             builder.HasIndex(o => o.Id);
             builder.HasOne(o => o.Authority)
                 .WithMany(a => a.Officials)
-                .HasForeignKey(o => o.AuthorityId);
+                .HasForeignKey(o => o.AuthorityId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
         }
     }
 }
