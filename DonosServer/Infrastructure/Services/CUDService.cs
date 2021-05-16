@@ -10,14 +10,12 @@ namespace Infrastructure.Services
     public abstract class CUDService<T> : CreateService<T>, ICUDService<T>
         where T : BaseModel
     {
-        private readonly DbSet<T> dbSet;
         
         public CUDService(Donos_Context context) : base(context)
         {
-            this.dbSet = context.Set<T>();
         }
 
-        public virtual T Edit(T entity)
+        public T Edit(T entity)
         {
             entity.LastModifiedDate = DateTime.Now;
             this.dbSet.Update(entity);

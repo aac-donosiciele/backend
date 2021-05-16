@@ -10,14 +10,14 @@ namespace Infrastructure.Services.BasicCrudServices
             where T : BaseModel
     {
         protected readonly Donos_Context context;
-        private readonly DbSet<T> dbSet;
+        protected readonly DbSet<T> dbSet;
 
         public CreateService(Donos_Context context)
         {
             this.context = context;
             this.dbSet = context.Set<T>();
         }
-        public virtual T Add(T entity)
+        public T Add(T entity)
         {
             entity.LastModifiedDate = entity.CreatedDate = DateTime.Now;
             this.dbSet.Add(entity);
