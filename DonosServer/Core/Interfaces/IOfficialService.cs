@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Core.Interfaces
 {
-    public interface IOfficialService : ICUDService<Official>, IRead<Official>
+    public interface IOfficialService : ICUDService<Official>, ICreate<Official>
     {
         IEnumerable<Official> GetAll(Guid id);
     }

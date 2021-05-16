@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Core.Interfaces
 {
-    public interface IAuthorityService : ICUDService<Authority>, IRead<Authority>
+    public interface IAuthorityService : ICUDService<Authority>, ICreate<Authority>
     {
         IEnumerable<Authority> GetAll(ComplaintCategory category);
     }
