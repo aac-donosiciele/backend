@@ -16,9 +16,13 @@ namespace Infrastructure.Services
             var complaintlog = this.context.ComplaintsLogs.Find(complaintId);
             if(complaintlog != null)
             {
-                if (complaintlog.Status == 0)
+                if (complaintlog.Status == DetailedComplaintStatus.Pending)
                 {
-                    // deep copy and inserting
+                    // to change if it isnt working
+                    complaintlog.LastModifiedDate = complaintlog.CreatedDate;
+                    complaintlog.Status = DetailedComplaintStatus.Canceled;
+                    this.dbSet.Add(complaintlog);
+                    this.context.SaveChanges();
                 }
             }
         }

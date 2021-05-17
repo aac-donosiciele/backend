@@ -32,6 +32,4 @@ namespace Infrastructure
             builder.ApplyConfiguration(new AuthorityConfigurations());
         }
     }
-
-}
 }
