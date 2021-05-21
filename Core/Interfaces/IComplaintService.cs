@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Core.Interfaces
 {
-    public interface IComplaintService : ICUDService<Complaint>
+    public interface IComplaintService : ICRUDService<Complaint>
     {
         IEnumerable<Complaint> GetUserComplaints(Guid userId);
         IEnumerable<Complaint> GetOfficialComplaints(Guid officialId);

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.Migrations
 {
-    [DbContext(typeof(Donos_Context))]
+    [DbContext(typeof(DonosContext))]
     [Migration("20210517070149_CreatingDb")]
     partial class CreatingDb
     {

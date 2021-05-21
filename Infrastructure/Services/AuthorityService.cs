@@ -5,15 +5,15 @@ using System.Linq;
 
 namespace Infrastructure.Services
 {
-    public class AuthorityService : CUDService<Authority>, IAuthorityService
+    public class AuthorityService : CRUDService<Authority>, IAuthorityService
     {
-        public AuthorityService(Donos_Context context) : base(context)
+        public AuthorityService(DonosContext context) : base(context)
         {
         }
 
         public IEnumerable<Authority> GetAll(ComplaintCategory category)
         {
-            return this.context.Authorities.Where(a => a.Category == category).ToList();
+            return this.DbContext.Authorities.Where(a => a.Category == category).ToList();
         }
     }
 }

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Configurations
 {
-    class AuthorityConfigurations : IEntityTypeConfiguration<Authority>
+    internal class AuthorityConfigurations : IEntityTypeConfiguration<Authority>
     {
         public void Configure(EntityTypeBuilder<Authority> builder)
         {

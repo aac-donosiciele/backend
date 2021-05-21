@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Configurations
 {
-    class ComplaintLogConfigurations : IEntityTypeConfiguration<ComplaintLog>
+    internal class ComplaintLogConfigurations : IEntityTypeConfiguration<ComplaintLog>
     {
         public void Configure(EntityTypeBuilder<ComplaintLog> builder)
         {

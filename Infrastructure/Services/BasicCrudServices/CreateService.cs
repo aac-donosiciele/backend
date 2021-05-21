@@ -9,20 +9,20 @@ namespace Infrastructure.Services.BasicCrudServices
     public abstract class CreateService<T> : ICreate<T>
             where T : BaseModel
     {
-        protected readonly Donos_Context context;
-        protected readonly DbSet<T> dbSet;
+        protected readonly DonosContext DbContext;
+        protected readonly DbSet<T> DbSet;
 
-        public CreateService(Donos_Context context)
+        public CreateService(DonosContext context)
         {
-            this.context = context;
-            this.dbSet = context.Set<T>();
+            this.DbContext = context;
+            this.DbSet = context.Set<T>();
         }
         public T Add(T entity)
         {
             entity.LastModifiedDate = entity.CreatedDate = DateTime.Now;
-            this.dbSet.Add(entity);
-            this.context.SaveChanges();
-            return this.dbSet.Where(e => e.Id == entity.Id).FirstOrDefault();
+            this.DbSet.Add(entity);
+            this.DbContext.SaveChanges();
+            return this.DbSet.FirstOrDefault(e => e.Id == entity.Id);
         }
     }
 }

@@ -4,13 +4,13 @@ using Infrastructure.Configurations;
 
 namespace Infrastructure
 {
-    public class Donos_Context : DbContext
+    public class DonosContext : DbContext
     {
-        public Donos_Context(DbContextOptions<Donos_Context> options) : base(options)
+        public DonosContext(DbContextOptions<DonosContext> options) : base(options)
         {
         }
 
-        protected Donos_Context()
+        protected DonosContext()
         {
         }
 

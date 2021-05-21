@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Configurations
 {
-    class OfficialConfigurations : IEntityTypeConfiguration<Official>
+    internal class OfficialConfigurations : IEntityTypeConfiguration<Official>
     {
         public void Configure(EntityTypeBuilder<Official> builder)
         {

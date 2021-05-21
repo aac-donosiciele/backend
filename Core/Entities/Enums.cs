@@ -2,13 +2,13 @@
 {
     public enum ComplaintCategory
     {
-        P,
-        SM,
-        US,
-        GIS,
-        NB,
-        PIP,
-        MOPS
+        Policja,
+        StrazMiejska,
+        UrzadSkarbowy,
+        GlowntInspektoratSanitarny,
+        NadzorBudowlany,
+        PanstwowaInspekcjaPracy,
+        MiejskiOsrodekPomocySpolecznej
     }
     public enum DetailedComplaintStatus
     {

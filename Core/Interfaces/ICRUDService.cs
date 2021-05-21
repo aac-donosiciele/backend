@@ -3,7 +3,7 @@ using Core.Interfaces.BasicCrudServices;
 
 namespace Core.Interfaces
 {
-    public interface ICUDService<T> : ICreate<T>, IUpdate<T>, IDelete
+    public interface ICRUDService<T> : ICreate<T>, IRead<T>, IUpdate<T>, IDelete
         where T : BaseModel
     {
     }

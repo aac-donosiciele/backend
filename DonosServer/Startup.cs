@@ -6,7 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace DonosServer
+namespace DonosServer.API
 {
     public class Startup
     {
@@ -21,7 +21,7 @@ namespace DonosServer
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddDbContext<Donos_Context>(
+            services.AddDbContext<DonosContext>(
                 options => options.UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection")));
 
         }
