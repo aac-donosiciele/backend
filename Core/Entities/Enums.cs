@@ -5,7 +5,7 @@
         Policja,
         StrazMiejska,
         UrzadSkarbowy,
-        GlowntInspektoratSanitarny,
+        GlownyInspektoratSanitarny,
         NadzorBudowlany,
         PanstwowaInspekcjaPracy,
         MiejskiOsrodekPomocySpolecznej
