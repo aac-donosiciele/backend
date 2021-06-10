@@ -33,6 +33,7 @@ namespace DonosServer.API
                 });
 
             services.AddCors();
+            services.AddSwaggerGen();
 
             services.AddDbContext<DonosContext>(options => options.UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -56,6 +57,12 @@ namespace DonosServer.API
                 builder.AllowAnyOrigin();
                 builder.AllowAnyHeader();
                 builder.AllowAnyMethod();
+            });
+
+            app.UseSwagger();
+            app.UseSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "DonosServer API");
             });
 
             app.UseHttpsRedirection();
