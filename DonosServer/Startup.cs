@@ -36,11 +36,9 @@ namespace DonosServer.API
 
             services.AddDbContext<DonosContext>(options => options.UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddTransient(typeof(ICreate<>), typeof(CreateService<>));
             services.AddTransient<IAuthorityService, AuthorityService>();
             services.AddTransient<IComplaintLogService, ComplaintLogService>();
             services.AddTransient<IComplaintService, ComplaintService>();
-            services.AddTransient(typeof(ICRUDService<>), typeof(CRUDService<>));
             services.AddTransient<IOfficialService, OfficialService>();
             services.AddTransient<IUserService, UserService>();
         }
