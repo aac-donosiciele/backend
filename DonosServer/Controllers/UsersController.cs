@@ -98,5 +98,11 @@ namespace DonosServer.API.Controllers
             complaintLogService.CancelComplaint(new Guid(id));
             return Ok();
         }
+
+        [HttpPost("/login")]
+        public ActionResult<LogInResponse> LogIn(LogInRequest request)
+        {
+            return null;
+        }
     }
 }

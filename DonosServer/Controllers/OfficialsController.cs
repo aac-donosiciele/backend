@@ -33,13 +33,13 @@ namespace DonosServer.API.Controllers
                 Email = request.Email,
                 Id = new Guid(request.Id),
                 Pesel = request.Pesel,
-                Role = request.Role,
                 AuthorityId = new Guid(request.AuthorityId),
                 CreatedDate = DateTime.Now,
                 FirstName = request.FirstName,
                 LastName = request.LastName,
                 PhoneNumber = request.PhoneNumber,
-                LastModifiedDate = DateTime.Now
+                LastModifiedDate = DateTime.Now,
+                Role = request.Role
             });
             return Ok();
         }
@@ -60,7 +60,6 @@ namespace DonosServer.API.Controllers
                 Email = request.Email,
                 Id = new Guid(request.Id),
                 Pesel = request.Pesel,
-                Role = request.Role,
                 AuthorityId = new Guid(request.AuthorityId),
                 CreatedDate = DateTime.Now,
                 FirstName = request.FirstName,
@@ -84,7 +83,6 @@ namespace DonosServer.API.Controllers
                     Email = official.Email,
                     Id = official.Id.ToString(),
                     Pesel = official.Pesel,
-                    Role = official.Role,
                     AuthorityId = official.AuthorityId.ToString(),
                     FirstName = official.FirstName,
                     LastName = official.LastName,
@@ -118,7 +116,6 @@ namespace DonosServer.API.Controllers
                     Email = x.Email,
                     Id = x.Id.ToString(),
                     Pesel = x.Pesel,
-                    Role = x.Role,
                     AuthorityId = x.AuthorityId.ToString(),
                     FirstName = x.FirstName,
                     LastName = x.LastName,

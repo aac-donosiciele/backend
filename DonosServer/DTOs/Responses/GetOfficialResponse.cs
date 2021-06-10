@@ -12,6 +12,5 @@ namespace DonosServer.API.DTOs.Responses
         public string Email { get; set; }
         public string Pesel { get; set; }
         public string AuthorityId { get; set; }
-        public OfficialRole Role { get; set; }
     }
 }

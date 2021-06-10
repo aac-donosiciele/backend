@@ -1,5 +1,7 @@
-﻿using Core.Entities;
+﻿using Core;
+using Core.Entities;
 using Core.Interfaces;
+using System.Linq;
 
 namespace Infrastructure.Services
 {
@@ -7,6 +9,11 @@ namespace Infrastructure.Services
     {
         public UserService(DonosContext context) : base(context)
         {
+        }
+
+        public User GetByUsernameAndPassword(string username, string password)
+        {
+            return this.DbContext.Users.SingleOrDefault(x => x.Username == username && x.PasswordHash == Toolbox.ComputeHash(password));
         }
     }
 }

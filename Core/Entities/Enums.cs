@@ -20,8 +20,9 @@
         Finished
     }
 
-    public enum OfficialRole
+    public enum Role
     {
+        User,
         Official,
         Admin
     }
