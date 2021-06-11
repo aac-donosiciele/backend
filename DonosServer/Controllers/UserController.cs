@@ -1,5 +1,6 @@
 ﻿using Core.Entities;
 using Core.Interfaces;
+using DonosServer.API.Authorization;
 using DonosServer.API.Authorization.Attributes;
 using DonosServer.API.DTOs.Requests;
 using DonosServer.API.DTOs.Responses;
@@ -13,17 +14,19 @@ namespace DonosServer.API.Controllers
     [ApiController]
     [Route("/user")]
     [ServiceFilter(typeof(AuthorizationAttribute))]
-    public class UsersController : ControllerBase
+    public class UserController : ControllerBase
     {
         private readonly IUserService userService;
         private readonly IComplaintService complaintService;
         private readonly IComplaintLogService complaintLogService;
+        private readonly UserContext userContext;
 
-        public UsersController(IUserService userService, IComplaintService complaintService, IComplaintLogService complaintLogService)
+        public UserController(IUserService userService, IComplaintService complaintService, IComplaintLogService complaintLogService, UserContext userContext)
         {
             this.userService = userService;
             this.complaintService = complaintService;
             this.complaintLogService = complaintLogService;
+            this.userContext = userContext;
         }
         
         [HttpPut]
@@ -34,25 +37,6 @@ namespace DonosServer.API.Controllers
             user.IsVerified = request.Verified;
             userService.Edit(user);
             return Ok();
-        }
-
-        [HttpGet("{id}")]
-        [UserAuthorization]
-        [OfficialAuthorization]
-        [AdminAuthorization]
-        public ActionResult<GetUserResponse> GetUser(string id)
-        {
-            var user = userService.Get(new Guid(id));
-            return user switch
-            {
-                null => NotFound("User with given ID not found"),
-                _ => Ok(new GetUserResponse
-                {
-                    Id = user.Id.ToString(),
-                    Pesel = user.Pesel,
-                    Verified = user.IsVerified
-                })
-            };
         }
 
         [HttpPost("complaints")]
@@ -70,8 +54,7 @@ namespace DonosServer.API.Controllers
                 SendTime = DateTime.Now,
                 LastModifiedDate = DateTime.Now,
                 TargetFirstName = request.TargetFirstName,
-                TargetLastName = request.TargetLastName,
-                TargetAddress = request.TargetAddress
+                TargetLastName = request.TargetLastName
             });
             return Ok();
         }
@@ -86,14 +69,13 @@ namespace DonosServer.API.Controllers
             return user switch
             {
                 null => NotFound("User with given ID not found"),
-                _ => Ok(user.Complaints.Select(x => new GetUserComplaintResponse
+                not null => Ok(user.Complaints.Select(x => new GetUserComplaintResponse
                 {
                     Category = x.Category,
                     Id = x.Id.ToString(),
                     Note = x.Note,
                     SendDate = x.SendTime,
                     Status = x.ComplaintLogs.OrderByDescending(y => y.UpdateTime).First().Status,
-                    TargetAddress = x.TargetAddress,
                     TargetFirstName = x.TargetFirstName,
                     TargetLastName = x.TargetLastName
                 }))
@@ -162,6 +144,20 @@ namespace DonosServer.API.Controllers
                     Id = (int)ComplaintCategory.MiejskiOsrodekPomocySpolecznej,
                     Title = "Miejski Ośrodek Pomocy Społecznej"
                 }
+            });
+        }
+
+        [UserAuthorization]
+        [OfficialAuthorization]
+        [AdminAuthorization]
+        [HttpGet("")]
+        public ActionResult<GetUserResponse> GetUser()
+        {
+            var user = userService.Get(this.userContext.Id);
+            return Ok(new GetUserResponse
+            {
+                Id = user.Id.ToString(),
+                IsVerified = user.IsVerified
             });
         }
     }

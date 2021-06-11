@@ -15,10 +15,12 @@ namespace DonosServer.API.Authorization
     public class AuthorizationFilter : IActionFilter
     {
         private readonly DonosContext dbContext;
+        private readonly UserContext userContext;
 
-        public AuthorizationFilter(DonosContext dbContext)
+        public AuthorizationFilter(DonosContext dbContext, UserContext userContext)
         {
             this.dbContext = dbContext;
+            this.userContext = userContext;
         }
         
         public void OnActionExecuting(ActionExecutingContext context)
@@ -44,7 +46,7 @@ namespace DonosServer.API.Authorization
                 return;
             }
 
-            var user = dbContext.Users.SingleOrDefault(x => x.Username == username) ?? (IUser)dbContext.Officials.SingleOrDefault(x => x.Username == username);
+            var user = dbContext.Users.SingleOrDefault(x => x.Username == username) ?? (UserBase)dbContext.Officials.SingleOrDefault(x => x.Username == username);
             if (user is null)
             {
                 context.Result = new UnauthorizedObjectResult("Unauthorized");
@@ -57,6 +59,8 @@ namespace DonosServer.API.Authorization
                     StatusCode = StatusCodes.Status403Forbidden,
                 };
             }
+            
+            userContext.SetOnce(user.Id);
         }
 
         public void OnActionExecuted(ActionExecutedContext context)

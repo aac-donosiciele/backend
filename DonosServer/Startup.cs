@@ -26,11 +26,7 @@ namespace DonosServer.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers()
-                .AddJsonOptions(options =>
-                {
-                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
-                });
+            services.AddControllers();
 
             services.AddCors();
             services.AddSwaggerGen();

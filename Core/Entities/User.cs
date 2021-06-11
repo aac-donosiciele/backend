@@ -2,7 +2,7 @@
 
 namespace Core.Entities
 {
-    public class User : BaseModel, IUser
+    public class User : UserBase
     {
         public bool IsVerified { get; set; }
         public string Pesel { get; set; }

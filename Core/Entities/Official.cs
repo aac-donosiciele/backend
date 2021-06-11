@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Core.Entities
 {
-    public class Official : BaseModel, IUser
+    public class Official : UserBase
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }

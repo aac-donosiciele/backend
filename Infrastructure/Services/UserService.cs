@@ -15,5 +15,10 @@ namespace Infrastructure.Services
         {
             return this.DbContext.Users.SingleOrDefault(x => x.Username == username && x.PasswordHash == Toolbox.ComputeHash(password));
         }
+
+        public User GetByUsername(string username)
+        {
+            return this.DbContext.Users.SingleOrDefault(x => x.Username == username);
+        }
     }
 }

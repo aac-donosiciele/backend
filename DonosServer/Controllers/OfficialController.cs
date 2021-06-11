@@ -1,5 +1,6 @@
 ﻿using Core.Entities;
 using Core.Interfaces;
+using DonosServer.API.Authorization;
 using DonosServer.API.Authorization.Attributes;
 using DonosServer.API.DTOs.Requests;
 using DonosServer.API.DTOs.Responses;
@@ -13,17 +14,26 @@ namespace DonosServer.API.Controllers
     [ApiController]
     [Route("/official")]
     [ServiceFilter(typeof(AuthorizationAttribute))]
-    public class OfficialsController : ControllerBase
+    public class OfficialController : ControllerBase
     {
         private readonly IOfficialService officialService;
         private readonly IComplaintService complaintService;
+        private readonly IComplaintLogService complaintLogService;
         private readonly IAuthorityService authorityService;
+        private readonly UserContext userContext;
 
-        public OfficialsController(IOfficialService officialService, IComplaintService complaintService, IAuthorityService authorityService)
+
+        public OfficialController(IOfficialService officialService,
+                                  IComplaintService complaintService,
+                                  IAuthorityService authorityService,
+                                  IComplaintLogService complaintLogService,
+                                  UserContext userContext)
         {
             this.officialService = officialService;
             this.complaintService = complaintService;
+            this.complaintLogService = complaintLogService;
             this.authorityService = authorityService;
+            this.userContext = userContext;
         }
         
         [AdminAuthorization]
@@ -83,7 +93,7 @@ namespace DonosServer.API.Controllers
             return official switch
             {
                 null => NotFound("Official with given ID not found"),
-                _ => Ok(new GetOfficialResponse
+                not null => Ok(new GetOfficialResponse
                 {
                     Address = official.Address,
                     Email = official.Email,
@@ -107,7 +117,7 @@ namespace DonosServer.API.Controllers
             return official switch
             {
                 null => NotFound("Official with given ID not found"),
-                _ => Ok(complaintService.GetOfficialComplaints(official.Id))
+                not null => Ok(complaintService.GetOfficialComplaints(official.Id))
             };
         }
 
@@ -119,7 +129,7 @@ namespace DonosServer.API.Controllers
             return authority switch
             {
                 null => NotFound("Authority with the given ID not found"),
-                _ => Ok(authority.Officials.Select(x => new GetOfficialResponse
+                not null => Ok(authority.Officials.Select(x => new GetOfficialResponse
                 {
                     Address = x.Address,
                     Email = x.Email,
@@ -136,9 +146,38 @@ namespace DonosServer.API.Controllers
         [OfficialAuthorization]
         [AdminAuthorization]
         [HttpPost("/officialComplaint")]
-        public IActionResult AssignComplaint(AssignComplaintRequest request)
+        public IActionResult UpdateComplaint(UpdateComplaintRequest request)
         {
-            throw new NotImplementedException();
+            this.complaintLogService.Add(new ComplaintLog
+            {
+                ComplaintId = new Guid(request.ComplaintId),
+                Status = request.Status,
+                OfficialId = this.userContext.Id
+            });
+            return Ok();
+        }
+
+        [OfficialAuthorization]
+        [AdminAuthorization]
+        [HttpGet("complaint/{id}")]
+        public ActionResult<GetComplaintResponse> GetComplaint(string id)
+        {
+            var result = complaintService.Get(new Guid(id));
+            return result switch
+            {
+                null => NotFound(),
+                not null => Ok(new GetComplaintResponse
+                {
+                    History = result.ComplaintLogs.Select(x => new GetComplaintLogResponse
+                    {
+                        Status = x.Status,
+                        ComplaintId = x.ComplaintId.ToString(),
+                        OfficialId = x.OfficialId.ToString(),
+                        OfficialName = $"{x.Official.FirstName} {x.Official.LastName}",
+                        UpdateDate = x.UpdateTime
+                    })
+                })
+            };
         }
     }
 }
