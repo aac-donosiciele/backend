@@ -1,5 +1,6 @@
 ﻿using Core.Entities;
 using Core.Interfaces;
+using DonosServer.API.Authorization.Attributes;
 using DonosServer.API.DTOs.Requests;
 using DonosServer.API.DTOs.Responses;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +11,8 @@ using System.Linq;
 namespace DonosServer.API.Controllers
 {
     [ApiController]
-    [Route("/officials")]
+    [Route("/official")]
+    [ServiceFilter(typeof(AuthorizationAttribute))]
     public class OfficialsController : ControllerBase
     {
         private readonly IOfficialService officialService;
@@ -24,6 +26,7 @@ namespace DonosServer.API.Controllers
             this.authorityService = authorityService;
         }
         
+        [AdminAuthorization]
         [HttpPost]
         public IActionResult AddOfficial(AddOfficialRequest request)
         {
@@ -44,6 +47,7 @@ namespace DonosServer.API.Controllers
             return Ok();
         }
 
+        [AdminAuthorization]
         [HttpDelete("{id}")]
         public IActionResult RemoveOfficial(string id)
         {
@@ -51,6 +55,7 @@ namespace DonosServer.API.Controllers
             return Ok();
         }
 
+        [AdminAuthorization]
         [HttpPut]
         public IActionResult EditOfficial(EditOfficialRequest request)
         {
@@ -70,6 +75,7 @@ namespace DonosServer.API.Controllers
             return Ok();
         }
 
+        [AdminAuthorization]
         [HttpGet("{id}")]
         public ActionResult<GetOfficialResponse> GetOfficial(string id)
         {
@@ -92,6 +98,8 @@ namespace DonosServer.API.Controllers
 
         }
 
+        [OfficialAuthorization]
+        [AdminAuthorization]
         [HttpGet("{id}/complaints")]
         public ActionResult<IEnumerable<GetOfficialComplaintResponse>> GetOfficialComplaints(string id)
         {
@@ -103,6 +111,7 @@ namespace DonosServer.API.Controllers
             };
         }
 
+        [AdminAuthorization]
         [HttpGet("/authority/{id}/officials")]
         public ActionResult<IEnumerable<GetOfficialResponse>> GetOfficials(string id)
         {
@@ -124,6 +133,8 @@ namespace DonosServer.API.Controllers
             };
         }
 
+        [OfficialAuthorization]
+        [AdminAuthorization]
         [HttpPost("/officialComplaint")]
         public IActionResult AssignComplaint(AssignComplaintRequest request)
         {

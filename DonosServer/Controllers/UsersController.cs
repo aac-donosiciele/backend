@@ -1,5 +1,6 @@
 ﻿using Core.Entities;
 using Core.Interfaces;
+using DonosServer.API.Authorization.Attributes;
 using DonosServer.API.DTOs.Requests;
 using DonosServer.API.DTOs.Responses;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +11,8 @@ using System.Linq;
 namespace DonosServer.API.Controllers
 {
     [ApiController]
-    [Route("/users")]
+    [Route("/user")]
+    [ServiceFilter(typeof(AuthorizationAttribute))]
     public class UsersController : ControllerBase
     {
         private readonly IUserService userService;
@@ -35,6 +37,9 @@ namespace DonosServer.API.Controllers
         }
 
         [HttpGet("{id}")]
+        [UserAuthorization]
+        [OfficialAuthorization]
+        [AdminAuthorization]
         public ActionResult<GetUserResponse> GetUser(string id)
         {
             var user = userService.Get(new Guid(id));
@@ -51,6 +56,9 @@ namespace DonosServer.API.Controllers
         }
 
         [HttpPost("complaints")]
+        [UserAuthorization]
+        [OfficialAuthorization]
+        [AdminAuthorization]
         public IActionResult CreateComplaint(CreateComplaintRequest request)
         {
             complaintService.Add(new Complaint
@@ -69,6 +77,9 @@ namespace DonosServer.API.Controllers
         }
 
         [HttpGet("{id}/complaints")]
+        [UserAuthorization]
+        [OfficialAuthorization]
+        [AdminAuthorization]
         public ActionResult<IEnumerable<GetUserComplaintResponse>> GetUserComplaints(string id)
         {
             var user = userService.Get(new Guid(id));
@@ -90,6 +101,9 @@ namespace DonosServer.API.Controllers
         }
 
         [HttpDelete("complaints/{id}")]
+        [UserAuthorization]
+        [OfficialAuthorization]
+        [AdminAuthorization]
         public IActionResult CancelComplaint(string id)
         {
             var complaint = complaintService.Get(new Guid(id));
@@ -103,6 +117,52 @@ namespace DonosServer.API.Controllers
         public ActionResult<LogInResponse> LogIn(LogInRequest request)
         {
             return null;
+        }
+
+        [UserAuthorization]
+        [OfficialAuthorization]
+        [AdminAuthorization]
+        [HttpGet("/categories")]
+        public ActionResult<IEnumerable<Category>> GetCategories()
+        {
+            return Ok(new []
+            {
+                new Category
+                {
+                    Id = (int)ComplaintCategory.Policja,
+                    Title = "Policja"
+                },
+                new Category
+                {
+                    Id = (int)ComplaintCategory.NadzorBudowlany,
+                    Title = "Nadzór Budowlany"
+                },
+                new Category
+                {
+                    Id = (int)ComplaintCategory.StrazMiejska,
+                    Title = "Straż Miejska"
+                },
+                new Category
+                {
+                    Id = (int)ComplaintCategory.UrzadSkarbowy,
+                    Title = "Urząd Skarbowy"
+                },
+                new Category
+                {
+                    Id = (int)ComplaintCategory.GlownyInspektoratSanitarny,
+                    Title = "Główny Inspektorat Sanitarny"
+                },
+                new Category
+                {
+                    Id = (int)ComplaintCategory.PanstwowaInspekcjaPracy,
+                    Title = "Państwowa Inspekcja Pracy"
+                },
+                new Category
+                {
+                    Id = (int)ComplaintCategory.MiejskiOsrodekPomocySpolecznej,
+                    Title = "Miejski Ośrodek Pomocy Społecznej"
+                }
+            });
         }
     }
 }
