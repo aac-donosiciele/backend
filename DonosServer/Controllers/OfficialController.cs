@@ -114,7 +114,11 @@ namespace DonosServer.API.Controllers
         [HttpGet("{id}/complaints")]
         public ActionResult<IEnumerable<GetOfficialComplaintResponse>> GetOfficialComplaints(string id)
         {
-            var official = officialService.Get(new Guid(id));
+            if (!Guid.TryParse(id, out Guid guid))
+            {
+                return NotFound("Official with given ID not found");
+            }
+            var official = officialService.Get(guid);
             if (official is null)
                 return NotFound("Official with given ID not found");
             
