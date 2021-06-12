@@ -14,7 +14,7 @@ namespace DonosServer.API.Controllers
 {
     [ApiController]
     [Route("/user")]
-    [ServiceFilter(typeof(AuthorizationAttribute))]
+    [ServiceFilter(typeof(AuthorizationFilter))]
     public class UserController : ControllerBase
     {
         private readonly IUserService userService;

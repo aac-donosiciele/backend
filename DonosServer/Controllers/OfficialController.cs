@@ -14,7 +14,7 @@ namespace DonosServer.API.Controllers
 {
     [ApiController]
     [Route("/official")]
-    [ServiceFilter(typeof(AuthorizationAttribute))]
+    [ServiceFilter(typeof(AuthorizationFilter))]
     public class OfficialController : ControllerBase
     {
         private readonly IOfficialService officialService;

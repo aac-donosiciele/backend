@@ -15,9 +15,5 @@ namespace Core.Entities
         public Authority Authority { get; set; }
 
         public virtual ICollection<ComplaintLog> ComplaintLogs { get; set; } = new HashSet<ComplaintLog>();
-        
-        public string Username { get; set; }
-        public string PasswordHash { get; set; }
-        public Role Role { get; set; }
     }
 }
