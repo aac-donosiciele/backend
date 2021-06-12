@@ -113,6 +113,25 @@ namespace DonosServer.API.Controllers
             });
         }
 
+        [HttpPost("/register")]
+        public ActionResult<RegisterResponse> Register(RegisterRequest request)
+        {
+            var user = this.userService.GetByUsername(request.Login);
+            if (user is not null)
+                return Conflict();
+            user = this.userService.Add(new User
+            {
+                Username = request.Login,
+                PasswordHash = Toolbox.ComputeHash(request.Password),
+                Pesel = request.Pesel,
+                IsVerified = true
+            });
+            return new RegisterResponse
+            {
+                Token = Convert.ToBase64String(Encoding.UTF8.GetBytes(user.Username))
+            };
+        }
+
         [UserAuthorization]
         [OfficialAuthorization]
         [AdminAuthorization]
