@@ -34,7 +34,6 @@ namespace DonosServer.API
 
             services.AddDbContext<DonosContext>(options => options.UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddTransient<IAuthorityService, AuthorityService>();
             services.AddTransient<IComplaintLogService, ComplaintLogService>();
             services.AddTransient<IComplaintService, ComplaintService>();
             services.AddTransient<IOfficialService, OfficialService>();

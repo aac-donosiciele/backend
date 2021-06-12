@@ -19,45 +19,6 @@ namespace Infrastructure.Migrations
                 .HasAnnotation("ProductVersion", "5.0.5")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Core.Entities.Authority", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Address")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<int>("Category")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("LastModifiedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("MaxOfficials")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(10);
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasMaxLength(12)
-                        .HasColumnType("nvarchar(12)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Id");
-
-                    b.ToTable("Authorities");
-                });
-
             modelBuilder.Entity("Core.Entities.Complaint", b =>
                 {
                     b.Property<Guid>("Id")
@@ -144,52 +105,36 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Address")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("AuthorityId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int>("Category")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("LastModifiedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Pesel")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Role")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Username")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("AuthorityId");
 
                     b.HasIndex("Id");
 
                     b.ToTable("Officials");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("4ea6b4fa-eb64-4364-956c-d959effc0fa5"),
+                            Category = 0,
+                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = new Guid("0f5e2321-32d0-43ef-af28-d1492c8d7671"),
+                            Category = 5,
+                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        });
                 });
 
             modelBuilder.Entity("Core.Entities.User", b =>
@@ -232,7 +177,7 @@ namespace Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("f0442b6f-86f3-436e-9aba-3a7172588d5f"),
+                            Id = new Guid("4ea6b4fa-eb64-4364-956c-d959effc0fa5"),
                             Category = 0,
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsVerified = true,
@@ -244,7 +189,7 @@ namespace Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("18cdc0fb-faf0-4562-89ce-6ae28986a658"),
+                            Id = new Guid("0f5e2321-32d0-43ef-af28-d1492c8d7671"),
                             Category = 0,
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsVerified = true,
@@ -256,7 +201,7 @@ namespace Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("ea60ebdb-35ff-43c1-9f27-bd6431ea2515"),
+                            Id = new Guid("be54755e-f093-4c7a-a7e5-7c1826ecd11b"),
                             Category = 0,
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsVerified = true,
@@ -293,21 +238,6 @@ namespace Infrastructure.Migrations
                     b.Navigation("Complaint");
 
                     b.Navigation("Official");
-                });
-
-            modelBuilder.Entity("Core.Entities.Official", b =>
-                {
-                    b.HasOne("Core.Entities.Authority", "Authority")
-                        .WithMany("Officials")
-                        .HasForeignKey("AuthorityId")
-                        .IsRequired();
-
-                    b.Navigation("Authority");
-                });
-
-            modelBuilder.Entity("Core.Entities.Authority", b =>
-                {
-                    b.Navigation("Officials");
                 });
 
             modelBuilder.Entity("Core.Entities.Complaint", b =>

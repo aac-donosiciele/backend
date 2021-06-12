@@ -7,7 +7,6 @@ namespace DonosServer.API.DTOs.Responses
     {
         public DateTime UpdateDate { get; set; }
         public string OfficialId { get; set; }
-        public string OfficialName { get; set; }
         public string ComplaintId { get; set; }
         public string Status { get; set; }
     }

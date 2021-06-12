@@ -39,6 +39,20 @@ namespace Infrastructure.Configurations
 
             };
             builder.Entity<User>().HasData(new[] { tmp, tmp2, tmp3 });
+
+            Official of1 = new Official()
+            {
+                Id = tmp.Id,
+                Category = ComplaintCategory.Policja
+            };
+
+            Official of2 = new Official()
+            {
+                Id = tmp2.Id,
+                Category = ComplaintCategory.PanstwowaInspekcjaPracy
+
+            };
+            builder.Entity<Official>().HasData(new[] { of1, of2 });
         }
     }
 }

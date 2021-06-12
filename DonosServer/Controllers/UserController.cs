@@ -21,16 +21,16 @@ namespace DonosServer.API.Controllers
         private readonly IUserService userService;
         private readonly IComplaintService complaintService;
         private readonly IComplaintLogService complaintLogService;
-        private readonly IAuthorityService authorityService;
+        private readonly IOfficialService officialService;
 
         private readonly UserContext userContext;
 
-        public UserController(IUserService userService, IComplaintService complaintService, IComplaintLogService complaintLogService, IAuthorityService authorityService, UserContext userContext)
+        public UserController(IUserService userService, IComplaintService complaintService, IComplaintLogService complaintLogService, IOfficialService officialService, UserContext userContext)
         {
             this.userService = userService;
             this.complaintService = complaintService;
             this.complaintLogService = complaintLogService;
-            this.authorityService = authorityService;
+            this.officialService = officialService;
             this.userContext = userContext;
         }
         
@@ -50,7 +50,7 @@ namespace DonosServer.API.Controllers
         [AdminAuthorization]
         public IActionResult CreateComplaint(CreateComplaintRequest request)
         {
-            complaintService.Add(new Complaint
+            var tmp = new Complaint
             {
                 Category = request.Category,
                 Note = request.Note,
@@ -60,7 +60,21 @@ namespace DonosServer.API.Controllers
                 LastModifiedDate = DateTime.Now,
                 TargetFirstName = request.TargetFirstName,
                 TargetLastName = request.TargetLastName
-            });
+            };
+            complaintService.Add(tmp);
+            var offs = officialService.GetAll().Where(x => x.Category == request.Category).ToList();
+            Random r = new Random();
+
+            complaintLogService.Add(new ComplaintLog()
+            {
+                Category = request.Category,
+                ComplaintId = tmp.Id,
+                LastModifiedDate = tmp.LastModifiedDate,
+                CreatedDate = tmp.CreatedDate,
+                Id = Guid.NewGuid(),
+                OfficialId = offs[r.Next(0, offs.Count)].Id,
+                Status = DetailedComplaintStatus.Assigned
+            }) ;
             return Ok();
         }
 
@@ -75,6 +89,7 @@ namespace DonosServer.API.Controllers
                 return NotFound("User with given ID not found");
             }
             var user = userService.Get(guid);
+
             return user switch
             {
                 null => NotFound("User with given ID not found"),
@@ -142,11 +157,11 @@ namespace DonosServer.API.Controllers
         [HttpGet("/categories")]
         public ActionResult<IEnumerable<Category>> GetCategories()
         {
-            var tmp = this.authorityService.GetAll(ComplaintCategory.GlownyInspektoratSanitarny, true);
-            var categories = new List<Category>();
+            var tmp = this.officialService.GetAll();
+            var categories = new HashSet<Category>();
             foreach (var item in tmp.ToList())
                 categories.Add(Mapper.CategoryString(item.Category));
-            return Ok(categories);
+            return Ok(categories.ToArray());
         }
 
         [UserAuthorization]

@@ -13,14 +13,10 @@ namespace Infrastructure.Services
         {
         }
 
-        IEnumerable<Official> IOfficialService.GetAll(Guid id)
+        IEnumerable<Official> IOfficialService.GetAll()
         {
-            return this.DbContext.Officials.Where(o => o.AuthorityId == id).ToList();
+            return this.DbContext.Officials.ToList();
         }
 
-        public Official GetByUsernameAndPassword(string username, string password)
-        {
-            return this.DbContext.Officials.SingleOrDefault(x => x.Username == username && x.PasswordHash == Toolbox.ComputeHash(password));
-        }
     }
 }
