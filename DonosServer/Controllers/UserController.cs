@@ -70,7 +70,11 @@ namespace DonosServer.API.Controllers
         [AdminAuthorization]
         public ActionResult<IEnumerable<GetUserComplaintResponse>> GetUserComplaints(string id)
         {
-            var user = userService.Get(new Guid(id));
+            if(!Guid.TryParse(id, out Guid guid))
+            {
+                return NotFound("User with given ID not found");
+            }
+            var user = userService.Get(guid);
             return user switch
             {
                 null => NotFound("User with given ID not found"),
