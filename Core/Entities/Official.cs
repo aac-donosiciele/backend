@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Core.Entities
 {
-    public class Official : BaseModel
+    public class Official : UserBase
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -13,8 +13,11 @@ namespace Core.Entities
         public string Pesel { get; set; }
         public Guid AuthorityId { get; set; }
         public Authority Authority { get; set; }
-        public OfficialRole Role { get; set; }
 
         public virtual ICollection<ComplaintLog> ComplaintLogs { get; set; } = new HashSet<ComplaintLog>();
+        
+        public string Username { get; set; }
+        public string PasswordHash { get; set; }
+        public Role Role { get; set; }
     }
 }

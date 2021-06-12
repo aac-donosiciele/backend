@@ -1,10 +1,16 @@
+using Core.Interfaces;
+using Core.Interfaces.BasicCrudServices;
 using Infrastructure;
+using Infrastructure.Services;
+using Infrastructure.Services.BasicCrudServices;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace DonosServer.API
 {
@@ -21,9 +27,17 @@ namespace DonosServer.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddDbContext<DonosContext>(
-                options => options.UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddCors();
+            services.AddSwaggerGen();
+
+            services.AddDbContext<DonosContext>(options => options.UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddTransient<IAuthorityService, AuthorityService>();
+            services.AddTransient<IComplaintLogService, ComplaintLogService>();
+            services.AddTransient<IComplaintService, ComplaintService>();
+            services.AddTransient<IOfficialService, OfficialService>();
+            services.AddTransient<IUserService, UserService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -34,12 +48,23 @@ namespace DonosServer.API
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCors(builder =>
+            {
+                builder.AllowAnyOrigin();
+                builder.AllowAnyHeader();
+                builder.AllowAnyMethod();
+            });
+
+            app.UseSwagger();
+            app.UseSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "DonosServer API");
+            });
+
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
             app.UseAuthorization();
-
+            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

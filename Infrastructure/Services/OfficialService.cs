@@ -1,4 +1,5 @@
-﻿using Core.Entities;
+﻿using Core;
+using Core.Entities;
 using Core.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -12,9 +13,14 @@ namespace Infrastructure.Services
         {
         }
 
-    public IEnumerable<Official> GetAll(Guid id)
+        IEnumerable<Official> IOfficialService.GetAll(Guid id)
         {
             return this.DbContext.Officials.Where(o => o.AuthorityId == id).ToList();
+        }
+
+        public Official GetByUsernameAndPassword(string username, string password)
+        {
+            return this.DbContext.Officials.SingleOrDefault(x => x.Username == username && x.PasswordHash == Toolbox.ComputeHash(password));
         }
     }
 }

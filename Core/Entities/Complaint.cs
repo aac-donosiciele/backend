@@ -7,6 +7,7 @@ namespace Core.Entities
     {
         public string TargetFirstName { get; set; }
         public string TargetLastName { get; set; }
+        public string TargetAddress { get; set; }
         public Guid SenderId { get; set; }
         public User Sender { get; set; }
         public DateTime SendTime { get; set; }

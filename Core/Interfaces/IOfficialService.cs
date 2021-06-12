@@ -7,5 +7,6 @@ namespace Core.Interfaces
     public interface IOfficialService : ICRUDService<Official>
     {
         IEnumerable<Official> GetAll(Guid id);
+        Official GetByUsernameAndPassword(string username, string password);
     }
 }
