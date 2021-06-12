@@ -161,11 +161,13 @@ namespace DonosServer.API.Controllers
         [HttpPost("/officialComplaint")]
         public IActionResult UpdateComplaint(UpdateComplaintRequest request)
         {
+            if (this.userContext.Id.ToString() != request.OfficialId)
+                return NotFound();
             this.complaintLogService.Add(new ComplaintLog
             {
                 ComplaintId = new Guid(request.ComplaintId),
                 Status = request.Status,
-                OfficialId = this.userContext.Id
+                OfficialId = Guid.Parse(request.OfficialId)
             });
             return Ok();
         }
