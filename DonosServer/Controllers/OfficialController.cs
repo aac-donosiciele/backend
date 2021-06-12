@@ -58,7 +58,8 @@ namespace DonosServer.API.Controllers
                 TargetAddress = x.TargetAddress,
                 TargetFirstName = x.TargetFirstName,
                 TargetLastName = x.TargetLastName,
-                Status = Mapper.OfficialComplaintStatus(x.ComplaintLogs.OrderByDescending(y => y.UpdateTime).First().Status)
+                Status = Mapper.OfficialComplaintStatus(complaintLogService.GetComplaintLogs(x.Id)
+                .OrderByDescending(y => y.UpdateTime).First().Status)
             });
             return Ok(res);
             
@@ -93,7 +94,7 @@ namespace DonosServer.API.Controllers
                 null => NotFound(),
                 not null => Ok(new GetComplaintResponse
                 {
-                    History = result.ComplaintLogs.Select(x => new GetComplaintLogResponse
+                    History = complaintLogService.GetComplaintLogs(result.Id).Select(x => new GetComplaintLogResponse
                     {
                         Status = Mapper.OfficialComplaintStatus(x.Status),
                         ComplaintId = x.ComplaintId.ToString(),

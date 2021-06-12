@@ -2,7 +2,8 @@
 using Core.Interfaces;
 using Infrastructure.Services.BasicCrudServices;
 using System;
-
+using System.Collections.Generic;
+using System.Linq;
 namespace Infrastructure.Services
 {
     public class ComplaintLogService : CreateService<ComplaintLog>, IComplaintLogService
@@ -26,5 +27,10 @@ namespace Infrastructure.Services
                 }
             }
         }
+        public IEnumerable<ComplaintLog> GetComplaintLogs(Guid id)
+        {
+            return this.DbContext.ComplaintsLogs.Where(x => x.ComplaintId == id).ToList();
+        }
+        
     }
 }

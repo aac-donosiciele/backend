@@ -48,7 +48,7 @@ namespace Infrastructure.Configurations
 
             Official of2 = new Official()
             {
-                Id = tmp2.Id,
+                Id = tmp3.Id,
                 Category = ComplaintCategory.PanstwowaInspekcjaPracy
 
             };

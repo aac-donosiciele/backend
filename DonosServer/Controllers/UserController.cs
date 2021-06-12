@@ -93,7 +93,7 @@ namespace DonosServer.API.Controllers
             return user switch
             {
                 null => NotFound("User with given ID not found"),
-                not null => Ok(user.Complaints.Select(x => new GetUserComplaintResponse
+                not null => Ok(complaintService.GetUserComplaints(user.Id).Select(x => new GetUserComplaintResponse
                 {
                     Category = x.Category,
                     Id = x.Id.ToString(),

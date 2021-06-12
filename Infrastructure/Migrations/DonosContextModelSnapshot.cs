@@ -123,14 +123,14 @@ namespace Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("4ea6b4fa-eb64-4364-956c-d959effc0fa5"),
+                            Id = new Guid("5b3eb892-4de0-42cc-83ca-5099ba1b6248"),
                             Category = 0,
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LastModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
-                            Id = new Guid("0f5e2321-32d0-43ef-af28-d1492c8d7671"),
+                            Id = new Guid("86db2439-58d4-4dc3-8d08-518aeda09ec3"),
                             Category = 5,
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LastModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
@@ -177,7 +177,7 @@ namespace Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("4ea6b4fa-eb64-4364-956c-d959effc0fa5"),
+                            Id = new Guid("5b3eb892-4de0-42cc-83ca-5099ba1b6248"),
                             Category = 0,
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsVerified = true,
@@ -189,7 +189,7 @@ namespace Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("0f5e2321-32d0-43ef-af28-d1492c8d7671"),
+                            Id = new Guid("a09e5348-e16c-4390-bff3-3be7fe371bdd"),
                             Category = 0,
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsVerified = true,
@@ -201,7 +201,7 @@ namespace Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("be54755e-f093-4c7a-a7e5-7c1826ecd11b"),
+                            Id = new Guid("86db2439-58d4-4dc3-8d08-518aeda09ec3"),
                             Category = 0,
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsVerified = true,

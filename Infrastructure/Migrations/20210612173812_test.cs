@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Infrastructure.Migrations
 {
-    public partial class test1 : Migration
+    public partial class test : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -101,8 +101,8 @@ namespace Infrastructure.Migrations
                 columns: new[] { "Id", "Category", "CreatedDate", "LastModifiedDate" },
                 values: new object[,]
                 {
-                    { new Guid("4ea6b4fa-eb64-4364-956c-d959effc0fa5"), 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { new Guid("0f5e2321-32d0-43ef-af28-d1492c8d7671"), 5, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) }
+                    { new Guid("5b3eb892-4de0-42cc-83ca-5099ba1b6248"), 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { new Guid("86db2439-58d4-4dc3-8d08-518aeda09ec3"), 5, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) }
                 });
 
             migrationBuilder.InsertData(
@@ -110,9 +110,9 @@ namespace Infrastructure.Migrations
                 columns: new[] { "Id", "Category", "CreatedDate", "IsVerified", "LastModifiedDate", "PasswordHash", "Pesel", "Role", "Username" },
                 values: new object[,]
                 {
-                    { new Guid("4ea6b4fa-eb64-4364-956c-d959effc0fa5"), 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), true, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "a48dbf15d3c2e171b9328005d5727589903c0083b524efba66ea1516231bca85", "112345678", 2, "megaAdmin" },
-                    { new Guid("0f5e2321-32d0-43ef-af28-d1492c8d7671"), 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), true, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "e8e7b468dcb0446072821a7e5ffb21344ac784c3d6a02192f58df2764cd555e6", "012345678", 0, "megaAdmin12" },
-                    { new Guid("be54755e-f093-4c7a-a7e5-7c1826ecd11b"), 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), true, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "41455bd85390f866c132887d4ec3771240b21700c1b8de233ddab2d832c20c00", "012345690", 1, "megaAdmin123" }
+                    { new Guid("5b3eb892-4de0-42cc-83ca-5099ba1b6248"), 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), true, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "a48dbf15d3c2e171b9328005d5727589903c0083b524efba66ea1516231bca85", "112345678", 2, "megaAdmin" },
+                    { new Guid("a09e5348-e16c-4390-bff3-3be7fe371bdd"), 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), true, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "e8e7b468dcb0446072821a7e5ffb21344ac784c3d6a02192f58df2764cd555e6", "012345678", 0, "megaAdmin12" },
+                    { new Guid("86db2439-58d4-4dc3-8d08-518aeda09ec3"), 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), true, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "41455bd85390f866c132887d4ec3771240b21700c1b8de233ddab2d832c20c00", "012345690", 1, "megaAdmin123" }
                 });
 
             migrationBuilder.CreateIndex(
