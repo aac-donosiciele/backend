@@ -1,4 +1,5 @@
-﻿using Core.Entities;
+﻿using Core;
+using Core.Entities;
 using Core.Interfaces;
 using DonosServer.API.Authorization;
 using DonosServer.API.Authorization.Attributes;
@@ -114,11 +115,23 @@ namespace DonosServer.API.Controllers
         public ActionResult<IEnumerable<GetOfficialComplaintResponse>> GetOfficialComplaints(string id)
         {
             var official = officialService.Get(new Guid(id));
-            return official switch
+            if (official is null)
+                return NotFound("Official with given ID not found");
+            
+            var compl = complaintService.GetOfficialComplaints(official.Id);
+            var res = compl.Select(x => new GetOfficialComplaintResponse()
             {
-                null => NotFound("Official with given ID not found"),
-                not null => Ok(complaintService.GetOfficialComplaints(official.Id))
-            };
+                Category = Mapper.CategoryString(x.Category).Title,
+                Id = x.Id.ToString(),
+                Note = x.Note,
+                SendDate = x.SendTime,
+                TargetAddress = x.TargetAddress,
+                TargetFirstName = x.TargetFirstName,
+                TargetLastName = x.TargetLastName,
+                Status = Mapper.OfficialComplaintStatus(x.ComplaintLogs.OrderByDescending(y => y.UpdateTime).First().Status)
+            });
+            return Ok(res);
+            
         }
 
         [AdminAuthorization]
@@ -170,7 +183,7 @@ namespace DonosServer.API.Controllers
                 {
                     History = result.ComplaintLogs.Select(x => new GetComplaintLogResponse
                     {
-                        Status = x.Status,
+                        Status = Mapper.OfficialComplaintStatus(x.Status),
                         ComplaintId = x.ComplaintId.ToString(),
                         OfficialId = x.OfficialId.ToString(),
                         OfficialName = $"{x.Official.FirstName} {x.Official.LastName}",

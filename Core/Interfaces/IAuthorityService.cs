@@ -5,6 +5,6 @@ namespace Core.Interfaces
 {
     public interface IAuthorityService : ICRUDService<Authority>
     {
-        IEnumerable<Authority> GetAll(ComplaintCategory category);
+        IEnumerable<Authority> GetAll(ComplaintCategory category, bool all = false);
     }
 }

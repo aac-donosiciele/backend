@@ -1,5 +1,6 @@
 using Core.Interfaces;
 using Core.Interfaces.BasicCrudServices;
+using DonosServer.API.Authorization;
 using Infrastructure;
 using Infrastructure.Services;
 using Infrastructure.Services.BasicCrudServices;
@@ -38,6 +39,10 @@ namespace DonosServer.API
             services.AddTransient<IComplaintService, ComplaintService>();
             services.AddTransient<IOfficialService, OfficialService>();
             services.AddTransient<IUserService, UserService>();
+
+            // to dodalem
+            services.AddScoped<UserContext>();
+            services.AddScoped<AuthorizationFilter>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

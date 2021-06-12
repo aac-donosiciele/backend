@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(DonosContext))]
-    [Migration("20210517070149_CreatingDb")]
-    partial class CreatingDb
+    [Migration("20210612091211_start")]
+    partial class start
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -83,6 +83,9 @@ namespace Infrastructure.Migrations
 
                     b.Property<Guid>("SenderId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("TargetAddress")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TargetFirstName")
                         .HasMaxLength(50)
@@ -167,6 +170,9 @@ namespace Infrastructure.Migrations
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Pesel")
                         .HasColumnType("nvarchar(max)");
 
@@ -175,6 +181,9 @@ namespace Infrastructure.Migrations
 
                     b.Property<int>("Role")
                         .HasColumnType("int");
+
+                    b.Property<string>("Username")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -197,21 +206,68 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("IsVerified")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime>("LastModifiedDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Pesel")
                         .HasMaxLength(11)
                         .HasColumnType("nvarchar(11)");
 
-                    b.Property<bool>("Verified")
-                        .HasColumnType("bit");
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Username")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("Id");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("f0442b6f-86f3-436e-9aba-3a7172588d5f"),
+                            Category = 0,
+                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsVerified = true,
+                            LastModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PasswordHash = "a48dbf15d3c2e171b9328005d5727589903c0083b524efba66ea1516231bca85",
+                            Pesel = "112345678",
+                            Role = 2,
+                            Username = "megaAdmin"
+                        },
+                        new
+                        {
+                            Id = new Guid("18cdc0fb-faf0-4562-89ce-6ae28986a658"),
+                            Category = 0,
+                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsVerified = true,
+                            LastModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PasswordHash = "e8e7b468dcb0446072821a7e5ffb21344ac784c3d6a02192f58df2764cd555e6",
+                            Pesel = "012345678",
+                            Role = 0,
+                            Username = "megaAdmin12"
+                        },
+                        new
+                        {
+                            Id = new Guid("ea60ebdb-35ff-43c1-9f27-bd6431ea2515"),
+                            Category = 0,
+                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsVerified = true,
+                            LastModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PasswordHash = "41455bd85390f866c132887d4ec3771240b21700c1b8de233ddab2d832c20c00",
+                            Pesel = "012345690",
+                            Role = 1,
+                            Username = "megaAdmin123"
+                        });
                 });
 
             modelBuilder.Entity("Core.Entities.Complaint", b =>

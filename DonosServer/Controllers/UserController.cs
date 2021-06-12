@@ -1,4 +1,5 @@
-﻿using Core.Entities;
+﻿using Core;
+using Core.Entities;
 using Core.Interfaces;
 using DonosServer.API.Authorization;
 using DonosServer.API.Authorization.Attributes;
@@ -19,13 +20,16 @@ namespace DonosServer.API.Controllers
         private readonly IUserService userService;
         private readonly IComplaintService complaintService;
         private readonly IComplaintLogService complaintLogService;
+        private readonly IAuthorityService authorityService;
+
         private readonly UserContext userContext;
 
-        public UserController(IUserService userService, IComplaintService complaintService, IComplaintLogService complaintLogService, UserContext userContext)
+        public UserController(IUserService userService, IComplaintService complaintService, IComplaintLogService complaintLogService, IAuthorityService authorityService, UserContext userContext)
         {
             this.userService = userService;
             this.complaintService = complaintService;
             this.complaintLogService = complaintLogService;
+            this.authorityService = authorityService;
             this.userContext = userContext;
         }
         
@@ -75,7 +79,7 @@ namespace DonosServer.API.Controllers
                     Id = x.Id.ToString(),
                     Note = x.Note,
                     SendDate = x.SendTime,
-                    Status = x.ComplaintLogs.OrderByDescending(y => y.UpdateTime).First().Status,
+                    Status = Mapper.UserComplaintStatus(x.ComplaintLogs.OrderByDescending(y => y.UpdateTime).First().Status),
                     TargetFirstName = x.TargetFirstName,
                     TargetLastName = x.TargetLastName
                 }))
@@ -98,7 +102,15 @@ namespace DonosServer.API.Controllers
         [HttpPost("/login")]
         public ActionResult<LogInResponse> LogIn(LogInRequest request)
         {
-            return null;
+            // nie wchodzi tu
+            User tmp = this.userService.GetByUsernameAndPassword(request.Login, request.Password);
+            if (tmp == default(User))
+                return Unauthorized("Bad credentials");
+            return Ok(new LogInResponse()
+            {
+                Role = tmp.Role,
+                Token = tmp.Username
+            });
         }
 
         [UserAuthorization]
@@ -107,44 +119,13 @@ namespace DonosServer.API.Controllers
         [HttpGet("/categories")]
         public ActionResult<IEnumerable<Category>> GetCategories()
         {
-            return Ok(new []
+            var tmp = this.authorityService.GetAll(ComplaintCategory.GlownyInspektoratSanitarny, true);
+            List<Category> catList = new List<Category>();
+            foreach (var item in tmp.ToList())
             {
-                new Category
-                {
-                    Id = (int)ComplaintCategory.Policja,
-                    Title = "Policja"
-                },
-                new Category
-                {
-                    Id = (int)ComplaintCategory.NadzorBudowlany,
-                    Title = "Nadzór Budowlany"
-                },
-                new Category
-                {
-                    Id = (int)ComplaintCategory.StrazMiejska,
-                    Title = "Straż Miejska"
-                },
-                new Category
-                {
-                    Id = (int)ComplaintCategory.UrzadSkarbowy,
-                    Title = "Urząd Skarbowy"
-                },
-                new Category
-                {
-                    Id = (int)ComplaintCategory.GlownyInspektoratSanitarny,
-                    Title = "Główny Inspektorat Sanitarny"
-                },
-                new Category
-                {
-                    Id = (int)ComplaintCategory.PanstwowaInspekcjaPracy,
-                    Title = "Państwowa Inspekcja Pracy"
-                },
-                new Category
-                {
-                    Id = (int)ComplaintCategory.MiejskiOsrodekPomocySpolecznej,
-                    Title = "Miejski Ośrodek Pomocy Społecznej"
-                }
-            });
+                catList.Add(Mapper.CategoryString(item.Category));
+            }
+            return Ok(catList);
         }
 
         [UserAuthorization]

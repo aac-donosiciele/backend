@@ -11,6 +11,6 @@ namespace DonosServer.API.DTOs.Responses
         public string TargetLastName { get; set; }
         public DateTime SendDate { get; set; }
         public string Note { get; set; }
-        public DetailedComplaintStatus Status { get; set; }
+        public string Status { get; set; }
     }
 }

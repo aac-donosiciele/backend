@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Infrastructure.Migrations
 {
-    public partial class CreatingDb : Migration
+    public partial class start : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -30,8 +30,11 @@ namespace Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Verified = table.Column<bool>(type: "bit", nullable: false),
+                    IsVerified = table.Column<bool>(type: "bit", nullable: false),
                     Pesel = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: true),
+                    Username = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Role = table.Column<int>(type: "int", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LastModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Category = table.Column<int>(type: "int", nullable: false)
@@ -53,6 +56,8 @@ namespace Infrastructure.Migrations
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Pesel = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AuthorityId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Username = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Role = table.Column<int>(type: "int", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LastModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -76,6 +81,7 @@ namespace Infrastructure.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     TargetFirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     TargetLastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    TargetAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SenderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     SendTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -123,6 +129,21 @@ namespace Infrastructure.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "Category", "CreatedDate", "IsVerified", "LastModifiedDate", "PasswordHash", "Pesel", "Role", "Username" },
+                values: new object[] { new Guid("f0442b6f-86f3-436e-9aba-3a7172588d5f"), 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), true, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "a48dbf15d3c2e171b9328005d5727589903c0083b524efba66ea1516231bca85", "112345678", 2, "megaAdmin" });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "Category", "CreatedDate", "IsVerified", "LastModifiedDate", "PasswordHash", "Pesel", "Role", "Username" },
+                values: new object[] { new Guid("18cdc0fb-faf0-4562-89ce-6ae28986a658"), 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), true, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "e8e7b468dcb0446072821a7e5ffb21344ac784c3d6a02192f58df2764cd555e6", "012345678", 0, "megaAdmin12" });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "Category", "CreatedDate", "IsVerified", "LastModifiedDate", "PasswordHash", "Pesel", "Role", "Username" },
+                values: new object[] { new Guid("ea60ebdb-35ff-43c1-9f27-bd6431ea2515"), 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), true, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "41455bd85390f866c132887d4ec3771240b21700c1b8de233ddab2d832c20c00", "012345690", 1, "megaAdmin123" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Authorities_Id",

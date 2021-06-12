@@ -11,8 +11,10 @@ namespace Infrastructure.Services
         {
         }
 
-        public IEnumerable<Authority> GetAll(ComplaintCategory category)
+        public IEnumerable<Authority> GetAll(ComplaintCategory category, bool all = false)
         {
+            if (all)
+                return this.DbContext.Authorities.ToList();
             return this.DbContext.Authorities.Where(a => a.Category == category).ToList();
         }
     }
