@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace DonosServer.API.Controllers
 {
@@ -102,14 +103,13 @@ namespace DonosServer.API.Controllers
         [HttpPost("/login")]
         public ActionResult<LogInResponse> LogIn(LogInRequest request)
         {
-            // nie wchodzi tu
-            User tmp = this.userService.GetByUsernameAndPassword(request.Login, request.Password);
-            if (tmp == default(User))
+            var user = this.userService.GetByUsernameAndPassword(request.Login, request.Password);
+            if (user is null)
                 return Unauthorized("Bad credentials");
-            return Ok(new LogInResponse()
+            return Ok(new LogInResponse
             {
-                Role = tmp.Role,
-                Token = tmp.Username
+                Role = user.Role,
+                Token = Convert.ToBase64String(Encoding.UTF8.GetBytes(user.Username))
             });
         }
 
@@ -120,12 +120,10 @@ namespace DonosServer.API.Controllers
         public ActionResult<IEnumerable<Category>> GetCategories()
         {
             var tmp = this.authorityService.GetAll(ComplaintCategory.GlownyInspektoratSanitarny, true);
-            List<Category> catList = new List<Category>();
+            var categories = new List<Category>();
             foreach (var item in tmp.ToList())
-            {
-                catList.Add(Mapper.CategoryString(item.Category));
-            }
-            return Ok(catList);
+                categories.Add(Mapper.CategoryString(item.Category));
+            return Ok(categories);
         }
 
         [UserAuthorization]
