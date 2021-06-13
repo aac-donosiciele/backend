@@ -14,7 +14,6 @@ namespace Infrastructure
         {
         }
 
-        public DbSet<Authority> Authorities { get; set; }
         public DbSet<Official> Officials { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Complaint> Complaints { get; set; }
@@ -29,7 +28,6 @@ namespace Infrastructure
             builder.ApplyConfiguration(new OfficialConfigurations());
             builder.ApplyConfiguration(new ComplaintConfigurations());
             builder.ApplyConfiguration(new ComplaintLogConfigurations());
-            builder.ApplyConfiguration(new AuthorityConfigurations());
         }
     }
 }

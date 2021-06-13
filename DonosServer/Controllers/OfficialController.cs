@@ -1,4 +1,5 @@
-﻿using Core.Entities;
+﻿using Core;
+using Core.Entities;
 using Core.Interfaces;
 using DonosServer.API.Authorization;
 using DonosServer.API.Authorization.Attributes;
@@ -13,134 +14,95 @@ namespace DonosServer.API.Controllers
 {
     [ApiController]
     [Route("/official")]
-    [ServiceFilter(typeof(AuthorizationAttribute))]
+    [ServiceFilter(typeof(AuthorizationFilter))]
     public class OfficialController : ControllerBase
     {
         private readonly IOfficialService officialService;
+        private readonly IUserService userService;
+
         private readonly IComplaintService complaintService;
         private readonly IComplaintLogService complaintLogService;
-        private readonly IAuthorityService authorityService;
         private readonly UserContext userContext;
 
 
         public OfficialController(IOfficialService officialService,
+                                  IUserService userService,
                                   IComplaintService complaintService,
-                                  IAuthorityService authorityService,
                                   IComplaintLogService complaintLogService,
                                   UserContext userContext)
         {
             this.officialService = officialService;
+            this.userService = userService;
             this.complaintService = complaintService;
             this.complaintLogService = complaintLogService;
-            this.authorityService = authorityService;
             this.userContext = userContext;
         }
         
-        [AdminAuthorization]
-        [HttpPost]
-        public IActionResult AddOfficial(AddOfficialRequest request)
-        {
-            officialService.Add(new Official
-            {
-                Address = request.Address,
-                Email = request.Email,
-                Id = new Guid(request.Id),
-                Pesel = request.Pesel,
-                AuthorityId = new Guid(request.AuthorityId),
-                CreatedDate = DateTime.Now,
-                FirstName = request.FirstName,
-                LastName = request.LastName,
-                PhoneNumber = request.PhoneNumber,
-                LastModifiedDate = DateTime.Now,
-                Role = request.Role
-            });
-            return Ok();
-        }
-
-        [AdminAuthorization]
-        [HttpDelete("{id}")]
-        public IActionResult RemoveOfficial(string id)
-        {
-            officialService.Remove(new Guid(id));
-            return Ok();
-        }
-
-        [AdminAuthorization]
-        [HttpPut]
-        public IActionResult EditOfficial(EditOfficialRequest request)
-        {
-            officialService.Edit(new Official
-            {
-                Address = request.Address,
-                Email = request.Email,
-                Id = new Guid(request.Id),
-                Pesel = request.Pesel,
-                AuthorityId = new Guid(request.AuthorityId),
-                CreatedDate = DateTime.Now,
-                FirstName = request.FirstName,
-                LastName = request.LastName,
-                PhoneNumber = request.PhoneNumber,
-                LastModifiedDate = DateTime.Now
-            });
-            return Ok();
-        }
-
-        [AdminAuthorization]
-        [HttpGet("{id}")]
-        public ActionResult<GetOfficialResponse> GetOfficial(string id)
-        {
-            var official = officialService.Get(new Guid(id));
-            return official switch
-            {
-                null => NotFound("Official with given ID not found"),
-                not null => Ok(new GetOfficialResponse
-                {
-                    Address = official.Address,
-                    Email = official.Email,
-                    Id = official.Id.ToString(),
-                    Pesel = official.Pesel,
-                    AuthorityId = official.AuthorityId.ToString(),
-                    FirstName = official.FirstName,
-                    LastName = official.LastName,
-                    PhoneNumber = official.PhoneNumber
-                })
-            };
-
-        }
-
+        
         [OfficialAuthorization]
         [AdminAuthorization]
         [HttpGet("{id}/complaints")]
         public ActionResult<IEnumerable<GetOfficialComplaintResponse>> GetOfficialComplaints(string id)
         {
-            var official = officialService.Get(new Guid(id));
-            return official switch
+            if (!Guid.TryParse(id, out Guid guid))
             {
-                null => NotFound("Official with given ID not found"),
-                not null => Ok(complaintService.GetOfficialComplaints(official.Id))
-            };
+                return NotFound("Official with given ID not found");
+            }
+            var official = officialService.Get(guid);
+            if (official is null)
+                return NotFound("Official with given ID not found");
+            
+            var compl = complaintService.GetOfficialComplaints(official.Id);
+            var res = compl.Select(x => new GetOfficialComplaintResponse()
+            {
+                Category = Mapper.CategoryString(x.Category).Title,
+                Id = x.Id.ToString(),
+                Note = x.Note,
+                SendDate = x.SendTime,
+                TargetAddress = x.TargetAddress,
+                TargetFirstName = x.TargetFirstName,
+                TargetLastName = x.TargetLastName,
+                Status = Mapper.OfficialComplaintStatus(complaintLogService.GetComplaintLogs(x.Id)
+                .OrderByDescending(y => y.UpdateTime).First().Status)
+            });
+            return Ok(res);
+            
         }
 
         [AdminAuthorization]
-        [HttpGet("/authority/{id}/officials")]
-        public ActionResult<IEnumerable<GetOfficialResponse>> GetOfficials(string id)
+        [HttpGet("/users")]
+        public ActionResult<IEnumerable<GetUsers>> GetUsers()
         {
-            var authority = authorityService.Get(new Guid(id));
-            return authority switch
+            var users = this.userService.GetAll();
+            var res = users.Select(x => new GetUsers()
             {
-                null => NotFound("Authority with the given ID not found"),
-                not null => Ok(authority.Officials.Select(x => new GetOfficialResponse
-                {
-                    Address = x.Address,
-                    Email = x.Email,
-                    Id = x.Id.ToString(),
-                    Pesel = x.Pesel,
-                    AuthorityId = x.AuthorityId.ToString(),
-                    FirstName = x.FirstName,
-                    LastName = x.LastName,
-                    PhoneNumber = x.PhoneNumber
-                }))
-            };
+                Id = x.Id,
+                Role = (int)x.Role,
+                Username = x.Username,
+            });
+            return Ok(res);
+        }
+
+        [AdminAuthorization]
+        [HttpPost("/makeOfficial")]
+        public IActionResult UpdateToOfficial(MakeOfficial makeOfficial)
+        {
+            if (!Guid.TryParse(makeOfficial.Id, out Guid guid))
+            {
+                return NotFound("User with given ID not found");
+            }
+            var user = userService.Get(guid);
+            user.Role = Role.Official;
+            this.userService.Edit(user);
+            Random r = new Random();
+            officialService.Add(new Official()
+            {
+                Category = (ComplaintCategory)r.Next(0, 7),
+                CreatedDate = DateTime.Now,
+                LastModifiedDate = DateTime.Now,
+                Id = user.Id
+            });
+            return NoContent();
         }
 
         [OfficialAuthorization]
@@ -148,13 +110,15 @@ namespace DonosServer.API.Controllers
         [HttpPost("/officialComplaint")]
         public IActionResult UpdateComplaint(UpdateComplaintRequest request)
         {
+            if (this.userContext.Id.ToString() != request.OfficialId)
+                return NotFound();
             this.complaintLogService.Add(new ComplaintLog
             {
                 ComplaintId = new Guid(request.ComplaintId),
                 Status = request.Status,
-                OfficialId = this.userContext.Id
+                OfficialId = Guid.Parse(request.OfficialId)
             });
-            return Ok();
+            return NoContent();
         }
 
         [OfficialAuthorization]
@@ -168,12 +132,11 @@ namespace DonosServer.API.Controllers
                 null => NotFound(),
                 not null => Ok(new GetComplaintResponse
                 {
-                    History = result.ComplaintLogs.Select(x => new GetComplaintLogResponse
+                    History = complaintLogService.GetComplaintLogs(result.Id).Select(x => new GetComplaintLogResponse
                     {
-                        Status = x.Status,
+                        Status = Mapper.OfficialComplaintStatus(x.Status),
                         ComplaintId = x.ComplaintId.ToString(),
                         OfficialId = x.OfficialId.ToString(),
-                        OfficialName = $"{x.Official.FirstName} {x.Official.LastName}",
                         UpdateDate = x.UpdateTime
                     })
                 })

@@ -1,6 +1,7 @@
 ﻿using Core;
 using Core.Entities;
 using Core.Interfaces;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Infrastructure.Services
@@ -19,6 +20,11 @@ namespace Infrastructure.Services
         public User GetByUsername(string username)
         {
             return this.DbContext.Users.SingleOrDefault(x => x.Username == username);
+        }
+
+        public IEnumerable<User> GetAll()
+        {
+            return this.DbContext.Users.ToList();
         }
     }
 }

@@ -46,7 +46,7 @@ namespace DonosServer.API.Authorization
                 return;
             }
 
-            var user = dbContext.Users.SingleOrDefault(x => x.Username == username) ?? (UserBase)dbContext.Officials.SingleOrDefault(x => x.Username == username);
+            var user = dbContext.Users.SingleOrDefault(x => x.Username == username) ?? (UserBase)dbContext.Users.SingleOrDefault(x => x.Username == username);
             if (user is null)
             {
                 context.Result = new UnauthorizedObjectResult("Unauthorized");

@@ -11,6 +11,10 @@ namespace Infrastructure.Configurations
             builder.HasKey(u => u.Id);
             builder.Property(u => u.Pesel).HasMaxLength(11);
             builder.HasIndex(u => u.Id);
+
+            builder.HasMany(u => u.Complaints)
+                .WithOne(c => c.Sender)
+                .HasForeignKey(u => u.SenderId);
         }
     }
 }

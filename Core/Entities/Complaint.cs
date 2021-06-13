@@ -12,6 +12,7 @@ namespace Core.Entities
         public User Sender { get; set; }
         public DateTime SendTime { get; set; }
         public string Note { get; set; }
+
         public virtual ICollection<ComplaintLog> ComplaintLogs { get; set; } = new HashSet<ComplaintLog>();
     }
 }

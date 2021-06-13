@@ -1,4 +1,5 @@
 ﻿using Core.Entities;
+using System.Collections.Generic;
 
 namespace Core.Interfaces
 {
@@ -6,5 +7,7 @@ namespace Core.Interfaces
     {
         User GetByUsernameAndPassword(string username, string password);
         User GetByUsername(string username);
+
+        IEnumerable<User> GetAll();
     }
 }
