@@ -75,7 +75,7 @@ namespace DonosServer.API.Controllers
                 OfficialId = offs[r.Next(0, offs.Count)].Id,
                 Status = DetailedComplaintStatus.Assigned
             }) ;
-            return Ok();
+            return NoContent();
         }
 
         [HttpGet("{id}/complaints")]
@@ -138,11 +138,17 @@ namespace DonosServer.API.Controllers
             var user = this.userService.GetByUsername(request.Login);
             if (user is not null)
                 return Conflict();
+            StringBuilder sb = new StringBuilder();
+            Random r = new Random();
+            for (int i = 0; i < 11; i++)
+            {
+                sb.Append(r.Next(10).ToString());
+            }
             user = this.userService.Add(new User
             {
                 Username = request.Login,
                 PasswordHash = Toolbox.ComputeHash(request.Password),
-                Pesel = request.Pesel,
+                Pesel = sb.ToString(),
                 IsVerified = true
             });
             return new RegisterResponse

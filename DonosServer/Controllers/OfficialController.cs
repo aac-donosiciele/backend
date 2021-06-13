@@ -18,17 +18,21 @@ namespace DonosServer.API.Controllers
     public class OfficialController : ControllerBase
     {
         private readonly IOfficialService officialService;
+        private readonly IUserService userService;
+
         private readonly IComplaintService complaintService;
         private readonly IComplaintLogService complaintLogService;
         private readonly UserContext userContext;
 
 
         public OfficialController(IOfficialService officialService,
+                                  IUserService userService,
                                   IComplaintService complaintService,
                                   IComplaintLogService complaintLogService,
                                   UserContext userContext)
         {
             this.officialService = officialService;
+            this.userService = userService;
             this.complaintService = complaintService;
             this.complaintLogService = complaintLogService;
             this.userContext = userContext;
@@ -65,7 +69,41 @@ namespace DonosServer.API.Controllers
             
         }
 
-     
+        [AdminAuthorization]
+        [HttpGet("/users")]
+        public ActionResult<IEnumerable<GetUsers>> GetUsers()
+        {
+            var users = this.userService.GetAll();
+            var res = users.Select(x => new GetUsers()
+            {
+                Id = x.Id,
+                Role = (int)x.Role,
+                Username = x.Username,
+            });
+            return Ok(res);
+        }
+
+        [AdminAuthorization]
+        [HttpPost("/makeOfficial")]
+        public IActionResult UpdateToOfficial(MakeOfficial makeOfficial)
+        {
+            if (!Guid.TryParse(makeOfficial.Id, out Guid guid))
+            {
+                return NotFound("User with given ID not found");
+            }
+            var user = userService.Get(guid);
+            user.Role = Role.Official;
+            this.userService.Edit(user);
+            Random r = new Random();
+            officialService.Add(new Official()
+            {
+                Category = (ComplaintCategory)r.Next(0, 7),
+                CreatedDate = DateTime.Now,
+                LastModifiedDate = DateTime.Now,
+                Id = user.Id
+            });
+            return NoContent();
+        }
 
         [OfficialAuthorization]
         [AdminAuthorization]
@@ -80,7 +118,7 @@ namespace DonosServer.API.Controllers
                 Status = request.Status,
                 OfficialId = Guid.Parse(request.OfficialId)
             });
-            return Ok();
+            return NoContent();
         }
 
         [OfficialAuthorization]

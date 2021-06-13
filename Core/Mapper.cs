@@ -69,7 +69,7 @@ namespace Core
             {
                 DetailedComplaintStatus.Pending => "Pending",
                 DetailedComplaintStatus.Canceled => "Canceled",
-                DetailedComplaintStatus.Assigned => "InProgress",
+                DetailedComplaintStatus.Assigned => "Assigned",
                 DetailedComplaintStatus.Rejected => "Rejected",
                 DetailedComplaintStatus.InProgress => "InProgress",
                 DetailedComplaintStatus.Finished => "Finished",
